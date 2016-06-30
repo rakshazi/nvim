@@ -51,7 +51,8 @@ let g:NERDTreeDirArrowCollapsible = '➖'
 
 " Additional stuff
 
-:set tabstop=4 shiftwidth=4 expandtab " Set softtabs
+set tabstop=4 shiftwidth=4 expandtab " Set softtabs
+set number " Show line numbers
 
 " Buffers
 function! ChangeBuf(cmd)
