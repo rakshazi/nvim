@@ -8,6 +8,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree' " File list
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
     Plug 'Xuyuanp/nerdtree-git-plugin' " Show git info (changes, etc) in file list
+    Plug 'beanworks/vim-phpfmt' " PHP formatter, uses https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
 call plug#end()
 
 " Keymap
