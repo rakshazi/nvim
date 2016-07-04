@@ -8,7 +8,10 @@ call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree' " File list
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
     Plug 'Xuyuanp/nerdtree-git-plugin' " Show git info (changes, etc) in file list
+    Plug '2072/PHP-Indenting-for-VIm' " PHP indents
     Plug 'beanworks/vim-phpfmt' " PHP formatter, uses https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
+    Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
+    Plug 'eshion/vim-sync' " Autoupload changed files
 call plug#end()
 
 " Keymap
@@ -27,8 +30,9 @@ nnoremap <silent> <C-p> :call ChangeBuf(":bp")<CR>
 
 
 
-" Airline: show tabs
-let g:airline#extensions#tabline#enabled = 1
+" Airline
+let g:airline_theme = "darcula" " Theme
+let g:airline#extensions#tabline#enabled = 1 " Show tabs
 
 " Syntastic
 set statusline+=%#warningmsg#
@@ -48,10 +52,14 @@ let NERDTreeAutoDeleteBuffer = 1 " Autoupdate buffer after file renaming
 let g:NERDTreeDirArrowExpandable = '➕'
 let g:NERDTreeDirArrowCollapsible = '➖'
 
+" vim-sync
+autocmd BufWritePost * :call SyncUploadFile() " Auto upload file
+" autocmd BufReadPre * :call SyncDownloadFile() "Auto download file
 
 
 " Additional stuff
 
+colorscheme py-darcula "Colortheme
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
 set number " Show line numbers
 
