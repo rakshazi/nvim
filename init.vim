@@ -25,10 +25,13 @@ map <C-_> <plug>NERDCommenterToggle
 imap <C-_> <c-o><C-_>
 
 "" Map buffers
-nnoremap <silent> <C-n> :call ChangeBuf(":bn")<CR>
-nnoremap <silent> <C-p> :call ChangeBuf(":bp")<CR>
+nnoremap <silent> <C-n> :call ChangeBuf(":bn")<CR> " Next buffer on Ctrl+n
+nnoremap <silent> <C-p> :call ChangeBuf(":bp")<CR> " Previous buffer on Ctrl+p
+map <silent> <C-w> :call ChangeBuf(":bd")<CR> " Close current buffer on Ctrl+w
+imap <C-w> <c-o><C-w>
 
-
+"" File sync
+nnoremap <C-u> <ESC>:call SyncUploadFile()<CR>
 
 " Airline
 let g:airline_theme = "darcula" " Theme
@@ -53,7 +56,7 @@ let g:NERDTreeDirArrowExpandable = '➕'
 let g:NERDTreeDirArrowCollapsible = '➖'
 
 " vim-sync
-autocmd BufWritePost * :call SyncUploadFile() " Auto upload file
+" autocmd BufWritePost * :call SyncUploadFile() " Auto upload file
 " autocmd BufReadPre * :call SyncDownloadFile() "Auto download file
 
 
