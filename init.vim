@@ -9,7 +9,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
     Plug 'Xuyuanp/nerdtree-git-plugin' " Show git info (changes, etc) in file list
     Plug '2072/PHP-Indenting-for-VIm' " PHP indents
-    Plug 'beanworks/vim-phpfmt' " PHP formatter, uses https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
+    Plug 'stephpy/vim-php-cs-fixer', {'do': 'wget http://get.sensiolabs.org/php-cs-fixer.phar -O ~/.config/nvim/php-cs-fixer.phar && chmod a+x ~/.config/nvim/php-cs-fixer.phar'} " PHP CS Fixer
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'eshion/vim-sync' " Autoupload changed files
 call plug#end()
@@ -52,8 +52,15 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif " Start NERDTree on vim startup if no files specified in args
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif " Close vim if only NERDTree buffer is opened
 let NERDTreeAutoDeleteBuffer = 1 " Autoupdate buffer after file renaming
+let NERDTreeShowHidden = 1 " Show hidden files
 let g:NERDTreeDirArrowExpandable = '➕'
 let g:NERDTreeDirArrowCollapsible = '➖'
+
+" vim-php-cs-fixer
+let g:php_cs_fixer_path = "~/.config/nvim/php-cs-fixer.phar"
+let g:php_cs_fixer_level = "psr2"
+let g:php_cs_fixer_enable_default_mapping = 0
+autocmd BufWritePost *.php silent! :call PhpCsFixerFixFile()  | silent! :syntax on " Auto fix php file on save
 
 " vim-sync
 " autocmd BufWritePost * :call SyncUploadFile() " Auto upload file
