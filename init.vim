@@ -1,9 +1,7 @@
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
     Plug 'vim-airline/vim-airline' " You know what is it
-    Plug 'chrisbra/csv.vim' " Filetype plugin for CSV
     Plug 'scrooloose/syntastic' " Linter (syntax checker)
     Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
-    Plug 'eugen0329/vim-esearch' " Cool file-search tool
     Plug 'tpope/vim-sensible' " 'Base' vim config
     Plug 'scrooloose/nerdtree' " File list
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
@@ -12,6 +10,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'stephpy/vim-php-cs-fixer', {'do': 'wget http://get.sensiolabs.org/php-cs-fixer.phar -O ~/.config/nvim/php-cs-fixer.phar && chmod a+x ~/.config/nvim/php-cs-fixer.phar'} " PHP CS Fixer
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'eshion/vim-sync' " Autoupload changed files
+    Plug 'ryanoasis/vim-devicons', {'do': 'wget https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/install.sh -O ~/font-install.sh; chmod a+x ~/font-install.sh; ./font-install.sh \"Ubuntu Mono derivative Nerd Font\"; rm ~/font-install.sh'} " Glyph icons for airline, nerdtree, etc.
 call plug#end()
 
 " Keymap
@@ -34,8 +33,12 @@ imap <C-w> <c-o><C-w>
 nnoremap <C-u> <ESC>:call SyncUploadFile()<CR>
 
 " Airline
+set laststatus=2
 let g:airline_theme = "darcula" " Theme
+let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1 " Show tabs
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " Syntastic
 set statusline+=%#warningmsg#
@@ -53,8 +56,6 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif " St
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif " Close vim if only NERDTree buffer is opened
 let NERDTreeAutoDeleteBuffer = 1 " Autoupdate buffer after file renaming
 let NERDTreeShowHidden = 1 " Show hidden files
-let g:NERDTreeDirArrowExpandable = '➕'
-let g:NERDTreeDirArrowCollapsible = '➖'
 
 " vim-php-cs-fixer
 let g:php_cs_fixer_path = "~/.config/nvim/php-cs-fixer.phar"
@@ -69,6 +70,8 @@ autocmd BufWritePost *.php silent! :call PhpCsFixerFixFile()  | silent! :syntax 
 
 " Additional stuff
 
+set encoding=utf8
+set guifont=Ubuntu\ Mono\ derivative\ Nerd\ Font\ 13
 colorscheme py-darcula "Colortheme
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
 set number " Show line numbers
