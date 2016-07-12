@@ -10,7 +10,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'stephpy/vim-php-cs-fixer', {'do': 'wget http://get.sensiolabs.org/php-cs-fixer.phar -O ~/.config/nvim/php-cs-fixer.phar && chmod a+x ~/.config/nvim/php-cs-fixer.phar'} " PHP CS Fixer
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'eshion/vim-sync' " Autoupload changed files
-    Plug 'ryanoasis/vim-devicons', {'do': 'wget https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/install.sh -O ~/font-install.sh; chmod a+x ~/font-install.sh; ./font-install.sh \"Ubuntu Mono derivative Nerd Font\"; rm ~/font-install.sh'} " Glyph icons for airline, nerdtree, etc.
+    "Plug 'ryanoasis/vim-devicons', {'do': 'wget https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/install.sh -O ~/font-install.sh; chmod a+x ~/font-install.sh; ./font-install.sh \"Ubuntu Mono derivative Nerd Font\"; rm ~/font-install.sh'} " Glyph icons for airline, nerdtree, etc.
 call plug#end()
 
 " Keymap
@@ -31,6 +31,10 @@ imap <C-w> <c-o><C-w>
 
 "" File sync
 nnoremap <C-u> <ESC>:call SyncUploadFile()<CR>
+
+"" QuickFix windows navigation (eg: for :grep)
+map <silent> <C-Down> :cn<CR>
+map <silent> <C-Up> :cp<CR>
 
 " Airline
 set laststatus=2
@@ -67,6 +71,8 @@ autocmd BufWritePost *.php silent! :call PhpCsFixerFixFile()  | silent! :syntax 
 " autocmd BufWritePost * :call SyncUploadFile() " Auto upload file
 " autocmd BufReadPre * :call SyncDownloadFile() "Auto download file
 
+" vim-devicons
+" let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = 'ƛ' " Default symbol if no glyph found
 
 " Additional stuff
 
@@ -75,6 +81,11 @@ set guifont=Ubuntu\ Mono\ derivative\ Nerd\ Font\ 13
 colorscheme py-darcula "Colortheme
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
 set number " Show line numbers
+if has("gui_running")
+    set mouse=a
+else
+    set mouse=
+endif
 
 " Buffers
 function! ChangeBuf(cmd)
