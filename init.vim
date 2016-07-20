@@ -10,7 +10,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'stephpy/vim-php-cs-fixer', {'do': 'wget http://get.sensiolabs.org/php-cs-fixer.phar -O ~/.config/nvim/php-cs-fixer.phar && chmod a+x ~/.config/nvim/php-cs-fixer.phar'} " PHP CS Fixer
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'eshion/vim-sync' " Autoupload changed files
-    Plug 'mjoey/vim-magento' " Magento helper commands
+    Plug 'rakshazi/vim-magento' " Magento helper commands
     "Plug 'ryanoasis/vim-devicons', {'do': 'wget https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/install.sh -O ~/font-install.sh; chmod a+x ~/font-install.sh; ./font-install.sh \"Ubuntu Mono derivative Nerd Font\"; rm ~/font-install.sh'} " Glyph icons for airline, nerdtree, etc.
 call plug#end()
 
@@ -75,9 +75,6 @@ let g:php_cs_fixer_path = "~/.config/nvim/php-cs-fixer.phar"
 let g:php_cs_fixer_level = "psr2"
 let g:php_cs_fixer_enable_default_mapping = 0
 autocmd BufWritePost *.php silent! :call PhpCsFixerFixFile()  | silent! :syntax on " Auto fix php file on save
-
-" vim-magento
-let g:vimMagentoSignature = 0 " Disable adding signatures
 
 " vim-sync
 " autocmd BufWritePost * :call SyncUploadFile() " Auto upload file
