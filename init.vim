@@ -1,4 +1,8 @@
-call plug#begin('~/.config/nvim/plugged')
+let nvimRoot = '~/.config/nvim'
+let nvimPlugged = nvimRoot.'/plugged'
+let nvimBin = nvimRoot.'/bin'
+
+call plug#begin(nvimPlugged)
     Plug 'vim-airline/vim-airline' " You know what is it
     Plug 'scrooloose/syntastic' " Linter (syntax checker)
     Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
@@ -7,11 +11,14 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
     Plug 'Xuyuanp/nerdtree-git-plugin' " Show git info (changes, etc) in file list
     Plug '2072/PHP-Indenting-for-VIm' " PHP indents
-    Plug 'stephpy/vim-php-cs-fixer', {'do': 'wget http://get.sensiolabs.org/php-cs-fixer.phar -O ~/.config/nvim/php-cs-fixer.phar && chmod a+x ~/.config/nvim/php-cs-fixer.phar'} " PHP CS Fixer
+    Plug 'xolox/vim-misc'
+    Plug 'xolox/vim-easytags'
+    Plug 'stephpy/vim-php-cs-fixer', {'do': 'mkdir -p '.nvimBin.' && wget http://get.sensiolabs.org/php-cs-fixer.phar -O '.nvimBin.'/php-cs-fixer.phar && chmod a+x '.nvimBin.'/php-cs-fixer.phar'} " PHP CS
+    Plug 'shawncplus/phpcomplete.vim'
+    Plug 'vim-php/phpctags', {'do': 'mkdir -p '.nvimBin.' && wget http://vim-php.com/phpctags/install/phpctags.phar -O '.nvimBin.'/phpctags.phar && chmod a+x '.nvimBin.'/phpctags.phar'}
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'eshion/vim-sync' " Autoupload changed files
-    Plug 'rakshazi/vim-magento' " Magento helper commands
-    "Plug 'ryanoasis/vim-devicons', {'do': 'wget https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/install.sh -O ~/font-install.sh; chmod a+x ~/font-install.sh; ./font-install.sh \"Ubuntu Mono derivative Nerd Font\"; rm ~/font-install.sh'} " Glyph icons for airline, nerdtree, etc.
+    Plug 'mjoey/vim-magento' " Magento helper commands
 call plug#end()
 
 " Keymap
@@ -44,6 +51,9 @@ map <silent> <ESC> :nohlsearch<CR>
 map <silent> <C-s> :w<CR>
 imap <C-s> <c-o><C-s>
 
+"" Omnicomplete on <tab>
+inoremap <tab> <c-r>=Smart_TabComplete()<CR>
+
 
 " Airline
 set laststatus=2
@@ -57,7 +67,6 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -71,17 +80,24 @@ let NERDTreeAutoDeleteBuffer = 1 " Autoupdate buffer after file renaming
 let NERDTreeShowHidden = 1 " Show hidden files
 
 " vim-php-cs-fixer
-let g:php_cs_fixer_path = "~/.config/nvim/php-cs-fixer.phar"
+let g:php_cs_fixer_path = nvimBin."/php-cs-fixer.phar"
 let g:php_cs_fixer_level = "psr2"
 let g:php_cs_fixer_enable_default_mapping = 0
 autocmd BufWritePost *.php silent! :call PhpCsFixerFixFile()  | silent! :syntax on " Auto fix php file on save
 
-" vim-sync
-" autocmd BufWritePost * :call SyncUploadFile() " Auto upload file
-" autocmd BufReadPre * :call SyncDownloadFile() "Auto download file
+" vim-easytags
+let g:easytags_cmd = nvimBin.'/phpctags.phar'
+let g:easytags_file = nvimRoot.'/tags'
 
-" vim-devicons
-" let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = 'ƛ' " Default symbol if no glyph found
+" vim-magento
+let g:vimMagentoAuthor = "Nikita Chernyi <developer.nikus@gmail.com>"
+let g:vimMagentoCopyright = " "
+let g:vimMagentoLicense = " "
+let g:vimMagentoSignature = 0
+
+" phpcomplete.vim
+let g:phpcomplete_parse_docblock_comments = 1 " Show docs from comments
+autocmd CompleteDone * pclose " Autoclose preview windows with docs after complete done
 
 " Additional stuff
 
@@ -104,3 +120,23 @@ function! ChangeBuf(cmd)
     execute a:cmd
 endfunction
 
+" Use <tab> for complete only if string not empty
+function! Smart_TabComplete()
+  let line = getline('.')                         " current line
+  let substr = strpart(line, -1, col('.')+1)      " from the start of the current
+                                                  " line to one character right
+                                                  " of the cursor
+  let substr = matchstr(substr, "[^ \t]*$")       " word till cursor
+  if (strlen(substr)==0)                          " nothing to match on empty string
+    return "\<tab>"
+  endif
+  "let has_period = match(substr, '\.') != -1      " position of period, if any
+  "let has_slash = match(substr, '\/') != -1       " position of slash, if any
+  "if (!has_period && !has_slash)
+    "return "\<C-X>\<C-P>"                         " existing text matching
+  "elseif ( has_slash )
+    "return "\<C-X>\<C-F>"                         " file matching
+  "else
+    return "\<C-X>\<C-O>"                         " plugin matching
+  "endif
+endfunction

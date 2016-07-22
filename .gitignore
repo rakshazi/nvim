@@ -2,4 +2,5 @@ autoload
 plugged
 .init.vim-rplugin~
 .netrwhist
-php-cs-fixer.phar
+bin/
+tags
