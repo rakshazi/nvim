@@ -100,7 +100,7 @@ let g:phpcomplete_parse_docblock_comments = 1 " Show docs from comments
 autocmd CompleteDone * pclose " Autoclose preview windows with docs after complete done
 
 " Additional stuff
-
+autocmd BufWritePost * silent! :%s/\s\+$//g " Remove all trailing whitespace (including empty lines)
 set encoding=utf8
 set guifont=Ubuntu\ Mono\ derivative\ Nerd\ Font\ 13
 colorscheme py-darcula "Colortheme
