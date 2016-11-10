@@ -14,6 +14,8 @@ call plug#begin(nvimPlugged)
     Plug 'stephpy/vim-php-cs-fixer', {'do': 'mkdir -p '.nvimBin.' && wget http://get.sensiolabs.org/php-cs-fixer.phar -O '.nvimBin.'/php-cs-fixer.phar && chmod a+x '.nvimBin.'/php-cs-fixer.phar'} " PHP CS
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'eshion/vim-sync' " Autoupload changed files
+    Plug 'kien/ctrlp.vim'
+    Plug 'pearofducks/ansible-vim'
 call plug#end()
 
 " Keymap
@@ -85,6 +87,9 @@ let g:php_cs_fixer_path = nvimBin."/php-cs-fixer.phar"
 let g:php_cs_fixer_level = "psr2"
 let g:php_cs_fixer_enable_default_mapping = 0
 autocmd BufWritePost *.php silent! :call PhpCsFixerFixFile()  | silent! :syntax on " Auto fix php file on save
+
+" ansible-vim
+let g:ansible_extra_keywords_highlight = 1
 
 " Additional stuff
 autocmd BufWritePost * silent! :%s/\s\+$//g " Remove all trailing whitespace (including empty lines)
