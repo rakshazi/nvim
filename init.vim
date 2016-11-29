@@ -5,6 +5,7 @@ let nvimBin = nvimRoot.'/bin'
 call plug#begin(nvimPlugged)
     Plug 'vim-airline/vim-airline' " You know what is it
     Plug 'vim-airline/vim-airline-themes'
+    Plug 'renyard/vim-git-flow-format'
     Plug 'scrooloose/syntastic' " Linter (syntax checker)
     Plug 'scrooloose/nerdtree' " File tree
     Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
@@ -16,6 +17,8 @@ call plug#begin(nvimPlugged)
     Plug 'eshion/vim-sync' " Autoupload changed files
     Plug 'kien/ctrlp.vim'
     Plug 'pearofducks/ansible-vim'
+    Plug 'tpope/vim-fugitive'
+    Plug 'gregsexton/gitv'
 call plug#end()
 
 " Keymap
@@ -48,10 +51,11 @@ map <silent> <C-s> :w<CR>
 imap <C-s> <c-o><C-s>
 
 " Airline
-"set laststatus=2
+set laststatus=2
 let g:airline_theme = "bubblegum" " Theme
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1 " Show tabs
+let g:airline#extensions#branch#format = 'Git_flow_branch_format'
 let g:airline_mode_map = {
       \ '__' : '-',
       \ 'n' : 'N',
@@ -93,6 +97,7 @@ let g:ansible_extra_keywords_highlight = 1
 
 " Additional stuff
 autocmd BufWritePost * silent! :%s/\s\+$//g " Remove all trailing whitespace (including empty lines)
+autocmd QuickFixCmdPost *grep* cwindow
 set encoding=utf8
 set guifont=Ubuntu\ Mono\ derivative\ Nerd\ Font\ 13
 colorscheme py-darcula "Colortheme
