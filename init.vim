@@ -12,10 +12,9 @@ call plug#begin(nvimPlugged)
     Plug 'tpope/vim-sensible' " 'Base' vim config
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
     Plug '2072/PHP-Indenting-for-VIm' " PHP indents
-    Plug 'stephpy/vim-php-cs-fixer', {'do': 'mkdir -p '.nvimBin.' && wget http://get.sensiolabs.org/php-cs-fixer.phar -O '.nvimBin.'/php-cs-fixer.phar && chmod a+x '.nvimBin.'/php-cs-fixer.phar'} " PHP CS
+    Plug 'stephpy/vim-php-cs-fixer', {'do': 'mkdir -p '.nvimBin.' && wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O '.nvimBin.'/php-cs-fixer.phar && chmod a+x '.nvimBin.'/php-cs-fixer.phar'} " PHP CS
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'eshion/vim-sync' " Autoupload changed files
-    Plug 'kien/ctrlp.vim'
     Plug 'pearofducks/ansible-vim'
     Plug 'tpope/vim-fugitive'
     Plug 'gregsexton/gitv'
