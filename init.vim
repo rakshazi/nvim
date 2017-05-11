@@ -5,7 +5,6 @@ let nvimBin = nvimRoot.'/bin'
 call plug#begin(nvimPlugged)
     Plug 'vim-airline/vim-airline' " You know what is it
     Plug 'vim-airline/vim-airline-themes'
-    Plug 'renyard/vim-git-flow-format'
     Plug 'scrooloose/syntastic' " Linter (syntax checker)
     Plug 'scrooloose/nerdtree' " File tree
     Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
@@ -14,10 +13,8 @@ call plug#begin(nvimPlugged)
     Plug '2072/PHP-Indenting-for-VIm' " PHP indents
     Plug 'stephpy/vim-php-cs-fixer', {'do': 'mkdir -p '.nvimBin.' && wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O '.nvimBin.'/php-cs-fixer.phar && chmod a+x '.nvimBin.'/php-cs-fixer.phar'} " PHP CS
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
-    Plug 'eshion/vim-sync' " Autoupload changed files
+    Plug 'jonathanfilip/vim-lucius' " Light colortheme
     Plug 'pearofducks/ansible-vim'
-    Plug 'tpope/vim-fugitive'
-    Plug 'gregsexton/gitv'
 call plug#end()
 
 " Keymap
@@ -30,9 +27,6 @@ nnoremap <silent> <C-n> :call ChangeBuf(":bn")<CR> " Next buffer on Ctrl+n
 nnoremap <silent> <C-p> :call ChangeBuf(":bp")<CR> " Previous buffer on Ctrl+p
 map <silent> <C-w> :call ChangeBuf(":bd")<CR> " Close current buffer on Ctrl+w
 imap <C-w> <c-o><C-w>
-
-"" File sync
-nnoremap <C-u> <ESC>:call SyncUploadFile()<CR>
 
 "" Toggle nerdtree
 map <silent> <F4> :NERDTreeToggle<CR>
@@ -54,7 +48,6 @@ set laststatus=2
 let g:airline_theme = "bubblegum" " Theme
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1 " Show tabs
-let g:airline#extensions#branch#format = 'Git_flow_branch_format'
 let g:airline_mode_map = {
       \ '__' : '-',
       \ 'n' : 'N',
@@ -70,9 +63,6 @@ let g:airline_mode_map = {
       \ }
 
 " Syntastic
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -93,13 +83,26 @@ autocmd BufWritePost *.php silent! :call PhpCsFixerFixFile()  | silent! :syntax 
 
 " ansible-vim
 let g:ansible_extra_keywords_highlight = 1
+let g:ansible_unindent_after_newline = 1
+let g:ansible_extra_syntaxes = "sh.vim"
+let g:ansible_attribute_highlight = "ao"
+let g:ansible_name_highlight = 'b'
+autocmd BufRead,BufNewFile deploy.yml set ft=ansible
 
 " Additional stuff
 autocmd BufWritePost * silent! :%s/\s\+$//g " Remove all trailing whitespace (including empty lines)
 autocmd QuickFixCmdPost *grep* cwindow
 set encoding=utf8
+set ruler
+set cursorline
+set confirm
 set guifont=Ubuntu\ Mono\ derivative\ Nerd\ Font\ 13
-colorscheme py-darcula "Colortheme
+
+" Theme
+" colorscheme py-darcula " dark
+let g:lucius_style = "light"
+colorscheme lucius " light
+
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
 set number " Show line numbers
 if has("gui_running")
