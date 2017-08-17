@@ -12,9 +12,14 @@ call plug#begin(nvimPlugged)
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
     Plug '2072/PHP-Indenting-for-VIm' " PHP indents
     Plug 'stephpy/vim-php-cs-fixer', {'do': 'mkdir -p '.nvimBin.' && wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O '.nvimBin.'/php-cs-fixer.phar && chmod a+x '.nvimBin.'/php-cs-fixer.phar'} " PHP CS
+    Plug 'vim-php/phpctags', {'do': 'mkdir -p '.nvimBin.' && wget http://vim-php.com/phpctags/install/phpctags.phar -O '.nvimBin.'/phpctags && chmod a+x '.nvimBin.'/phpctags'} " PHP ctags
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'jonathanfilip/vim-lucius' " Light colortheme
     Plug 'pearofducks/ansible-vim'
+    Plug 'ekalinin/Dockerfile.vim'
+    Plug 'avakhov/vim-yaml'
+    Plug 'ludovicchabant/vim-gutentags'
+    Plug 'StanAngeloff/php.vim'
 call plug#end()
 
 " Keymap
@@ -31,6 +36,9 @@ imap <C-w> <c-o><C-w>
 "" Toggle nerdtree
 map <silent> <F4> :NERDTreeToggle<CR>
 imap <silent> <F4> <c-o><F4>
+
+"" Tagbar
+nmap <F8> :TagbarToggle<CR>
 
 "" QuickFix windows navigation (eg: for :grep)
 map <silent> <C-Down> :cn<CR>
@@ -61,6 +69,14 @@ let g:airline_mode_map = {
       \ 'S' : 'S',
       \ '^S' : 'S',
       \ }
+
+" tags
+set tags=./.tags;
+let g:gutentags_ctags_executable = nvimBin.'/phpctags'
+let g:tagbar_phpctags_bin = nvimBin.'/phpctags'
+let g:gutentags_ctags_tagfile = './.tags'
+let g:gutentags_resolve_symlinks = 1
+let g:tagbar_phpctags_memory_limit = '512M'
 
 " Syntastic
 let g:syntastic_always_populate_loc_list = 1
@@ -97,6 +113,17 @@ set ruler
 set cursorline
 set confirm
 set guifont=Ubuntu\ Mono\ derivative\ Nerd\ Font\ 13
+
+" php.vim
+function! PhpSyntaxOverride()
+  hi! def link phpDocTags  phpDefine
+  hi! def link phpDocParam phpType
+endfunction
+
+augroup phpSyntaxOverride
+  autocmd!
+  autocmd FileType php call PhpSyntaxOverride()
+augroup END
 
 " Theme
 " colorscheme py-darcula " dark
