@@ -20,6 +20,7 @@ call plug#begin(nvimPlugged)
     Plug 'avakhov/vim-yaml'
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'StanAngeloff/php.vim'
+    Plug 'kien/ctrlp.vim'
 call plug#end()
 
 " Keymap
@@ -29,16 +30,13 @@ imap <C-_> <c-o><C-_>
 
 "" Map buffers
 nnoremap <silent> <C-n> :call ChangeBuf(":bn")<CR> " Next buffer on Ctrl+n
-nnoremap <silent> <C-p> :call ChangeBuf(":bp")<CR> " Previous buffer on Ctrl+p
+nnoremap <silent> <C-o> :call ChangeBuf(":bp")<CR> " Previous buffer on Ctrl+o
 map <silent> <C-w> :call ChangeBuf(":bd")<CR> " Close current buffer on Ctrl+w
 imap <C-w> <c-o><C-w>
 
 "" Toggle nerdtree
 map <silent> <F4> :NERDTreeToggle<CR>
 imap <silent> <F4> <c-o><F4>
-
-"" Tagbar
-nmap <F8> :TagbarToggle<CR>
 
 "" QuickFix windows navigation (eg: for :grep)
 map <silent> <C-Down> :cn<CR>
@@ -73,16 +71,18 @@ let g:airline_mode_map = {
 " tags
 set tags=./.tags;
 let g:gutentags_ctags_executable = nvimBin.'/phpctags'
-let g:tagbar_phpctags_bin = nvimBin.'/phpctags'
 let g:gutentags_ctags_tagfile = './.tags'
 let g:gutentags_resolve_symlinks = 1
-let g:tagbar_phpctags_memory_limit = '512M'
 
 " Syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
+
+" CtrlP
+let g:ctrlp_working_path_mode = 'ra'
+set wildignore+=*/app/cache/*,*.so,*.swp,*.zip,*.lock
 
 " NERDTree
 autocmd StdinReadPre * let s:std_in=1
