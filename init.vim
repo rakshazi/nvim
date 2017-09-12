@@ -11,7 +11,6 @@ call plug#begin(nvimPlugged)
     Plug 'tpope/vim-sensible' " 'Base' vim config
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
     Plug '2072/PHP-Indenting-for-VIm' " PHP indents
-    Plug 'stephpy/vim-php-cs-fixer' " PHP CS
     Plug 'vim-php/phpctags', {'do': 'mkdir -p '.nvimBin.' && wget http://vim-php.com/phpctags/install/phpctags.phar -O '.nvimBin.'/phpctags && chmod a+x '.nvimBin.'/phpctags'} " PHP ctags
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'jonathanfilip/vim-lucius' " Light colortheme
@@ -94,11 +93,6 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif " St
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif " Close vim if only NERDTree buffer is opened
 let NERDTreeAutoDeleteBuffer = 1 " Autoupdate buffer after file renaming
 let NERDTreeShowHidden = 1 " Show hidden files
-
-" vim-php-cs-fixer
-let g:php_cs_fixer_config_file = ".php_cs.dist"
-let g:php_cs_fixer_enable_default_mapping = 0
-autocmd BufWritePost *.php silent! :call PhpCsFixerFixFile()  | silent! :syntax on " Auto fix php file on save
 
 " ansible-vim
 let g:ansible_extra_keywords_highlight = 1
