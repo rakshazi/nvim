@@ -11,7 +11,7 @@ call plug#begin(nvimPlugged)
     Plug 'tpope/vim-sensible' " 'Base' vim config
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
     Plug '2072/PHP-Indenting-for-VIm' " PHP indents
-    Plug 'stephpy/vim-php-cs-fixer', {'do': 'mkdir -p '.nvimBin.' && wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O '.nvimBin.'/php-cs-fixer.phar && chmod a+x '.nvimBin.'/php-cs-fixer.phar'} " PHP CS
+    Plug 'stephpy/vim-php-cs-fixer' " PHP CS
     Plug 'vim-php/phpctags', {'do': 'mkdir -p '.nvimBin.' && wget http://vim-php.com/phpctags/install/phpctags.phar -O '.nvimBin.'/phpctags && chmod a+x '.nvimBin.'/phpctags'} " PHP ctags
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'jonathanfilip/vim-lucius' " Light colortheme
@@ -21,6 +21,7 @@ call plug#begin(nvimPlugged)
     Plug 'ludovicchabant/vim-gutentags'
     Plug 'StanAngeloff/php.vim'
     Plug 'kien/ctrlp.vim'
+    Plug 'mzlogin/vim-markdown-toc'
 call plug#end()
 
 " Keymap
@@ -74,6 +75,9 @@ let g:gutentags_ctags_executable = nvimBin.'/phpctags'
 let g:gutentags_ctags_tagfile = './.tags'
 let g:gutentags_resolve_symlinks = 1
 
+" mardown-toc
+let g:vmt_cycle_list_item_markers = 1
+
 " Syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -92,8 +96,7 @@ let NERDTreeAutoDeleteBuffer = 1 " Autoupdate buffer after file renaming
 let NERDTreeShowHidden = 1 " Show hidden files
 
 " vim-php-cs-fixer
-let g:php_cs_fixer_path = nvimBin."/php-cs-fixer.phar"
-let g:php_cs_fixer_level = "psr2"
+let g:php_cs_fixer_config_file = ".php_cs.dist"
 let g:php_cs_fixer_enable_default_mapping = 0
 autocmd BufWritePost *.php silent! :call PhpCsFixerFixFile()  | silent! :syntax on " Auto fix php file on save
 
