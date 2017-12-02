@@ -11,7 +11,6 @@ call plug#begin(nvimPlugged)
     Plug 'tpope/vim-sensible' " 'Base' vim config
     Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
     Plug '2072/PHP-Indenting-for-VIm' " PHP indents
-    Plug 'vim-php/phpctags', {'do': 'mkdir -p '.nvimBin.' && wget http://vim-php.com/phpctags/install/phpctags.phar -O '.nvimBin.'/phpctags && chmod a+x '.nvimBin.'/phpctags'} " PHP ctags
     Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
     Plug 'jonathanfilip/vim-lucius' " Light colortheme
     Plug 'pearofducks/ansible-vim'
@@ -68,12 +67,6 @@ let g:airline_mode_map = {
       \ '^S' : 'S',
       \ }
 
-" tags
-set tags=./.tags;
-let g:gutentags_ctags_executable = nvimBin.'/phpctags'
-let g:gutentags_ctags_tagfile = './.tags'
-let g:gutentags_resolve_symlinks = 1
-
 " mardown-toc
 let g:vmt_cycle_list_item_markers = 1
 
@@ -109,7 +102,6 @@ set encoding=utf8
 set ruler
 set cursorline
 set confirm
-set guifont=Ubuntu\ Mono\ derivative\ Nerd\ Font\ 13
 
 " php.vim
 function! PhpSyntaxOverride()
