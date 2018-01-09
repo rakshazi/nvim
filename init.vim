@@ -16,10 +16,10 @@ call plug#begin(nvimPlugged)
     Plug 'pearofducks/ansible-vim'
     Plug 'ekalinin/Dockerfile.vim'
     Plug 'avakhov/vim-yaml'
-    Plug 'ludovicchabant/vim-gutentags'
     Plug 'StanAngeloff/php.vim'
     Plug 'kien/ctrlp.vim'
     Plug 'mzlogin/vim-markdown-toc'
+    Plug 'hashivim/vim-terraform'
 call plug#end()
 
 " Keymap
