@@ -115,17 +115,13 @@ augroup phpSyntaxOverride
 augroup END
 
 " Theme
-" colorscheme py-darcula " dark
-let g:lucius_style = "light"
-colorscheme lucius " light
+ colorscheme py-darcula " dark
+"let g:lucius_style = "light"
+"colorscheme lucius " light
 
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
 set number " Show line numbers
-if has("gui_running")
-    set mouse=a
-else
-    set mouse=
-endif
+set mouse=
 
 " Buffers
 function! ChangeBuf(cmd)
