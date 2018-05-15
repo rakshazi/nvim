@@ -20,6 +20,7 @@ call plug#begin(nvimPlugged)
     Plug 'kien/ctrlp.vim'
     Plug 'mzlogin/vim-markdown-toc'
     Plug 'hashivim/vim-terraform'
+    Plug 'cespare/vim-toml'
 call plug#end()
 
 " Keymap
@@ -93,7 +94,6 @@ let g:ansible_unindent_after_newline = 1
 let g:ansible_extra_syntaxes = "sh.vim"
 let g:ansible_attribute_highlight = "ao"
 let g:ansible_name_highlight = 'b'
-autocmd BufRead,BufNewFile deploy.yml set ft=ansible
 
 " Additional stuff
 autocmd BufWritePost * silent! :%s/\s\+$//g " Remove all trailing whitespace (including empty lines)
@@ -115,8 +115,8 @@ augroup phpSyntaxOverride
 augroup END
 
 " Theme
- colorscheme py-darcula " dark
-"let g:lucius_style = "light"
+colorscheme py-darcula " dark
+let g:lucius_style = "light"
 "colorscheme lucius " light
 
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
