@@ -3,30 +3,35 @@ let nvimPlugged = nvimRoot.'/plugged'
 let nvimBin = nvimRoot.'/bin'
 
 call plug#begin(nvimPlugged)
-    Plug 'vim-airline/vim-airline' " You know what is it
-    Plug 'vim-airline/vim-airline-themes'
-    Plug 'scrooloose/syntastic' " Linter (syntax checker)
-    Plug 'scrooloose/nerdtree' " File tree
-    Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
-    Plug 'tpope/vim-sensible' " 'Base' vim config
-    Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
-    Plug '2072/PHP-Indenting-for-VIm' " PHP indents
-    Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
-    Plug 'jonathanfilip/vim-lucius' " Light colortheme
-    Plug 'pearofducks/ansible-vim'
-    Plug 'ekalinin/Dockerfile.vim'
-    Plug 'avakhov/vim-yaml'
-    Plug 'StanAngeloff/php.vim'
-    Plug 'kien/ctrlp.vim'
-    Plug 'mzlogin/vim-markdown-toc'
-    Plug 'hashivim/vim-terraform'
-    Plug 'cespare/vim-toml'
+Plug '2072/PHP-Indenting-for-VIm' " PHP indents
+Plug 'StanAngeloff/php.vim'
+Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
+Plug 'avakhov/vim-yaml'
+Plug 'cespare/vim-toml'
+Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'hashivim/vim-terraform'
+Plug 'jonathanfilip/vim-lucius' " Light colortheme
+Plug 'kien/ctrlp.vim'
+Plug 'mzlogin/vim-markdown-toc'
+Plug 'pearofducks/ansible-vim'
+Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
+Plug 'scrooloose/nerdtree' " File tree
+Plug 'scrooloose/syntastic' " Linter (syntax checker)
+Plug 'tpope/vim-sensible' " 'Base' vim config
+Plug 'vim-airline/vim-airline' " You know what is it
+Plug 'vim-airline/vim-airline-themes'
+Plug 'rakshazi/logstash.vim'
+Plug 'majutsushi/tagbar'
+Plug 'vim-php/tagbar-phpctags.vim'
 call plug#end()
 
 " Keymap
 "" Toggle comment
 map <C-_> <plug>NERDCommenterToggle
 imap <C-_> <c-o><C-_>
+
+nnoremap <F8> :TagbarToggle<CR>
 
 "" Map buffers
 nnoremap <silent> <C-n> :call ChangeBuf(":bn")<CR> " Next buffer on Ctrl+n
@@ -55,21 +60,44 @@ let g:airline_theme = "bubblegum" " Theme
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1 " Show tabs
 let g:airline_mode_map = {
-      \ '__' : '-',
-      \ 'n' : 'N',
-      \ 'i' : 'I',
-      \ 'R' : 'R',
-      \ 'c' : 'C',
-      \ 'v' : 'V',
-      \ 'V' : 'V',
-      \ '^V' : 'V',
-      \ 's' : 'S',
-      \ 'S' : 'S',
-      \ '^S' : 'S',
-      \ }
+            \ '__' : '-',
+            \ 'n' : 'N',
+            \ 'i' : 'I',
+            \ 'R' : 'R',
+            \ 'c' : 'C',
+            \ 'v' : 'V',
+            \ 'V' : 'V',
+            \ '^V' : 'V',
+            \ 's' : 'S',
+            \ 'S' : 'S',
+            \ '^S' : 'S',
+            \ }
 
 " mardown-toc
 let g:vmt_cycle_list_item_markers = 1
+
+" ctags
+let g:tagbar_autofocus = 1
+let g:tagbar_autoclose = 1
+let g:tagbar_phpctags_bin=nvimBin.'/phpctags'
+let g:tagbar_phpctags_memory_limit = '512M'
+let g:tagbar_type_css = {
+            \ 'ctagstype' : 'Css',
+            \ 'kinds'     : [
+            \ 'c:classes',
+            \ 's:selectors',
+            \ 'i:identities'
+            \ ]
+            \ }
+function! TagbarStatusFunc(current, sort, fname, flags, ...) abort
+    let colour = a:current ? '%#StatusLine#' : '%#StatusLineNC#'
+    let flagstr = join(flags, '')
+    if flagstr != ''
+        let flagstr = '[' . flagstr . '] '
+    endif
+    return colour . '[' . sort . '] ' . flagstr . fname
+endfunction
+let g:tagbar_status_func = 'TagbarStatusFunc'
 
 " Syntastic
 let g:syntastic_always_populate_loc_list = 1
@@ -105,13 +133,13 @@ set confirm
 
 " php.vim
 function! PhpSyntaxOverride()
-  hi! def link phpDocTags  phpDefine
-  hi! def link phpDocParam phpType
+    hi! def link phpDocTags  phpDefine
+    hi! def link phpDocParam phpType
 endfunction
 
 augroup phpSyntaxOverride
-  autocmd!
-  autocmd FileType php call PhpSyntaxOverride()
+    autocmd!
+    autocmd FileType php call PhpSyntaxOverride()
 augroup END
 
 " Theme
@@ -121,7 +149,7 @@ let g:lucius_style = "light"
 
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
 set number " Show line numbers
-set mouse=
+"set mouse=
 
 " Buffers
 function! ChangeBuf(cmd)
