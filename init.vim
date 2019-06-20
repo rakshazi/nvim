@@ -13,17 +13,19 @@ Plug 'ekalinin/Dockerfile.vim'
 Plug 'hashivim/vim-terraform'
 Plug 'jonathanfilip/vim-lucius' " Light colortheme
 Plug 'kien/ctrlp.vim'
+Plug 'majutsushi/tagbar'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'pearofducks/ansible-vim'
+Plug 'rakshazi/logstash.vim'
 Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
 Plug 'scrooloose/nerdtree' " File tree
 Plug 'scrooloose/syntastic' " Linter (syntax checker)
 Plug 'tpope/vim-sensible' " 'Base' vim config
 Plug 'vim-airline/vim-airline' " You know what is it
 Plug 'vim-airline/vim-airline-themes'
-Plug 'rakshazi/logstash.vim'
-Plug 'majutsushi/tagbar'
 Plug 'vim-php/tagbar-phpctags.vim'
+Plug 'ryanoasis/vim-devicons'
+Plug 'leafgarland/typescript-vim'
 call plug#end()
 
 " Keymap
@@ -31,12 +33,13 @@ call plug#end()
 map <C-_> <plug>NERDCommenterToggle
 imap <C-_> <c-o><C-_>
 
+"" Tagbar
 nnoremap <F8> :TagbarToggle<CR>
 
 "" Map buffers
-nnoremap <silent> <C-n> :call ChangeBuf(":bn")<CR> " Next buffer on Ctrl+n
-nnoremap <silent> <C-o> :call ChangeBuf(":bp")<CR> " Previous buffer on Ctrl+o
-map <silent> <C-w> :call ChangeBuf(":bd")<CR> " Close current buffer on Ctrl+w
+nnoremap <silent> <C-n> :call ChangeBuf(":bn")<CR>
+nnoremap <silent> <C-o> :call ChangeBuf(":bp")<CR>
+map <silent> <C-w> :call ChangeBuf(":bd")<CR>
 imap <C-w> <c-o><C-w>
 
 "" Toggle nerdtree
@@ -143,9 +146,9 @@ augroup phpSyntaxOverride
 augroup END
 
 " Theme
-colorscheme py-darcula " dark
+"colorscheme py-darcula " dark
 let g:lucius_style = "light"
-"colorscheme lucius " light
+colorscheme lucius " light
 
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
 set number " Show line numbers
