@@ -4,29 +4,40 @@ let nvimBin = nvimRoot.'/bin'
 
 call plug#begin(nvimPlugged)
 Plug '2072/PHP-Indenting-for-VIm' " PHP indents
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'Quramy/tsuquyomi'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'StanAngeloff/php.vim'
 Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
 Plug 'avakhov/vim-yaml'
+Plug 'carlitux/deoplete-ternjs'
 Plug 'cespare/vim-toml'
 Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'hashivim/vim-terraform'
 Plug 'jonathanfilip/vim-lucius' " Light colortheme
 Plug 'kien/ctrlp.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
+Plug 'mhartington/deoplete-typescript', {'do': './install.sh'}
 Plug 'mzlogin/vim-markdown-toc'
+Plug 'neomake/neomake'
+Plug 'pangloss/vim-javascript'
 Plug 'pearofducks/ansible-vim'
 Plug 'rakshazi/logstash.vim'
+Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
 Plug 'scrooloose/nerdtree' " File tree
 Plug 'scrooloose/syntastic' " Linter (syntax checker)
+Plug 'ternjs/tern_for_vim'
 Plug 'tpope/vim-sensible' " 'Base' vim config
 Plug 'vim-airline/vim-airline' " You know what is it
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-php/tagbar-phpctags.vim'
-Plug 'ryanoasis/vim-devicons'
-Plug 'leafgarland/typescript-vim'
 call plug#end()
+autocmd VimEnter * call deoplete#custom#source('_',  'disabled_syntaxes', ['Comment', 'String'])
 
 " Keymap
 "" Toggle comment
@@ -79,6 +90,38 @@ let g:airline_mode_map = {
 " mardown-toc
 let g:vmt_cycle_list_item_markers = 1
 
+" autocomplection
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#enable_camel_case = 1
+let g:deoplete#enable_refresh_always = 1
+let g:deoplete#max_abbr_width = 0
+let g:deoplete#max_menu_width = 0
+let g:deoplete#omni#input_patterns = get(g:,'deoplete#omni#input_patterns',{})
+function! s:check_back_space() abort "{{{
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction"}}}
+
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ deoplete#manual_complete()
+"call deoplete#custom#set('_', 'matchers', ['matcher_full_fuzzy'])
+
+"" js autocomplete
+let g:tern_request_timeout = 1
+let g:tern_request_timeout = 6000
+let g:tern#command = ["tern"]
+let g:tern#arguments = ["--persistent"]
+let g:deoplete#sources#tss#javascript_support = 1
+let g:tsuquyomi_javascript_support = 1
+let g:tsuquyomi_auto_open = 1
+let g:tsuquyomi_disable_quickfix = 1
+let g:node_host_prog = '~/.nvm/versions/node/v10.16.0/bin/neovim-node-host'
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+
 " ctags
 let g:tagbar_autofocus = 1
 let g:tagbar_autoclose = 1
@@ -107,6 +150,20 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
+
+" neomake
+let g:neomake_javascript_enabled_makers = ['eslint']
+call neomake#configure#automake('w')
+let g:neomake_open_list = 2
+let g:neomake_warning_sign = {
+            \ 'text': '?',
+            \ 'texthl': 'WarningMsg',
+            \ }
+
+let g:neomake_error_sign = {
+            \ 'text': 'X',
+            \ 'texthl': 'ErrorMsg',
+            \ }
 
 " CtrlP
 let g:ctrlp_working_path_mode = 'ra'
@@ -152,7 +209,6 @@ colorscheme lucius " light
 
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
 set number " Show line numbers
-"set mouse=
 
 " Buffers
 function! ChangeBuf(cmd)
