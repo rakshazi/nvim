@@ -8,6 +8,7 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'StanAngeloff/php.vim'
 Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
 Plug 'avakhov/vim-yaml'
@@ -17,13 +18,11 @@ Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://git
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'hashivim/vim-terraform'
 Plug 'jonathanfilip/vim-lucius' " Light colortheme
-Plug 'kien/ctrlp.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
 Plug 'mhartington/deoplete-typescript', {'do': './install.sh'}
 Plug 'mzlogin/vim-markdown-toc'
-Plug 'neomake/neomake'
 Plug 'pangloss/vim-javascript'
 Plug 'pearofducks/ansible-vim'
 Plug 'rakshazi/logstash.vim'
@@ -49,7 +48,7 @@ nnoremap <F8> :TagbarToggle<CR>
 
 "" Map buffers
 nnoremap <silent> <C-n> :call ChangeBuf(":bn")<CR>
-nnoremap <silent> <C-o> :call ChangeBuf(":bp")<CR>
+nnoremap <silent> <C-p> :call ChangeBuf(":bp")<CR>
 map <silent> <C-w> :call ChangeBuf(":bd")<CR>
 imap <C-w> <c-o><C-w>
 
@@ -151,24 +150,6 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
 
-" neomake
-let g:neomake_javascript_enabled_makers = ['eslint']
-call neomake#configure#automake('w')
-let g:neomake_open_list = 2
-let g:neomake_warning_sign = {
-            \ 'text': '?',
-            \ 'texthl': 'WarningMsg',
-            \ }
-
-let g:neomake_error_sign = {
-            \ 'text': 'X',
-            \ 'texthl': 'ErrorMsg',
-            \ }
-
-" CtrlP
-let g:ctrlp_working_path_mode = 'ra'
-set wildignore+=*/app/cache/*,*.so,*.swp,*.zip,*.lock
-
 " NERDTree
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif " Start NERDTree on vim startup if no files specified in args
@@ -183,8 +164,36 @@ let g:ansible_extra_syntaxes = "sh.vim"
 let g:ansible_attribute_highlight = "ao"
 let g:ansible_name_highlight = 'b'
 
+
+" vim-go https://github.com/fatih/vim-go-tutorial
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+
+let g:go_list_type = "quickfix"
+let g:go_metalinter_autosave = 1
+let g:go_auto_type_info = 1
+let g:go_auto_sameids = 1
+let g:go_fmt_command = "goimports"
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_function_calls = 1
+autocmd FileType go nmap <C-b> :<C-u>call <SID>build_go_files()<CR>
+autocmd FileType go nmap <C-r>  <Plug>(go-run)
+autocmd FileType go setlocal noexpandtab shiftwidth=4 tabstop=4 softtabstop=4 nolist
+
 " Additional stuff
-autocmd BufWritePost * silent! :%s/\s\+$//g " Remove all trailing whitespace (including empty lines)
+autocmd BufWritePre * kz|:%s/\s\+$//e|'z
+" autocmd BufWritePost * silent! :%s/\s\+$//g " Remove all trailing whitespace (including empty lines)
 autocmd QuickFixCmdPost *grep* cwindow
 set encoding=utf8
 set ruler
@@ -203,9 +212,9 @@ augroup phpSyntaxOverride
 augroup END
 
 " Theme
-"colorscheme py-darcula " dark
-let g:lucius_style = "light"
-colorscheme lucius " light
+colorscheme py-darcula " dark
+" let g:lucius_style = "light"
+" colorscheme lucius " light
 
 set tabstop=4 shiftwidth=4 expandtab " Set softtabs
 set number " Show line numbers
