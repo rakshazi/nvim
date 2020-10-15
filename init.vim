@@ -7,36 +7,31 @@ Plug '2072/PHP-Indenting-for-VIm' " PHP indents
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'deoplete-plugins/deoplete-tag'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'StanAngeloff/php.vim'
 Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
 Plug 'avakhov/vim-yaml'
-Plug 'carlitux/deoplete-ternjs'
 Plug 'cespare/vim-toml'
 Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'hashivim/vim-terraform'
 Plug 'jonathanfilip/vim-lucius' " Light colortheme
-Plug 'leafgarland/typescript-vim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
-Plug 'mhartington/deoplete-typescript', {'do': './install.sh'}
 Plug 'mzlogin/vim-markdown-toc'
-Plug 'pangloss/vim-javascript'
 Plug 'pearofducks/ansible-vim'
 Plug 'rakshazi/logstash.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
 Plug 'scrooloose/nerdtree' " File tree
 Plug 'scrooloose/syntastic' " Linter (syntax checker)
-Plug 'ternjs/tern_for_vim'
 Plug 'tpope/vim-sensible' " 'Base' vim config
 Plug 'vim-airline/vim-airline' " You know what is it
 Plug 'vim-airline/vim-airline-themes'
-Plug 'vim-php/tagbar-phpctags.vim'
 call plug#end()
-autocmd VimEnter * call deoplete#custom#source('_',  'disabled_syntaxes', ['Comment', 'String'])
 
 " Keymap
 "" Toggle comment
@@ -90,14 +85,17 @@ let g:airline_mode_map = {
 let g:vmt_cycle_list_item_markers = 1
 
 " autocomplection
+set completeopt-=preview
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#enable_camel_case = 1
-let g:deoplete#enable_refresh_always = 1
-let g:deoplete#max_abbr_width = 0
-let g:deoplete#max_menu_width = 0
-let g:deoplete#omni#input_patterns = get(g:,'deoplete#omni#input_patterns',{})
+call deoplete#custom#option('ignore_case', 1)
+call deoplete#custom#option('smart_case', 1)
+call deoplete#custom#option('camel_case', 1)
+call deoplete#custom#option('refresh_always', 1)
+call deoplete#custom#option('max_abbr_width', 0)
+call deoplete#custom#option('max_menu_width', 0)
+call deoplete#custom#option('ignore_sources', {'php': ['omni']})
+call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
+call deoplete#custom#source('_',  'disabled_syntaxes', ['Comment', 'String'])
 function! s:check_back_space() abort "{{{
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
@@ -107,25 +105,12 @@ inoremap <silent><expr> <TAB>
             \ pumvisible() ? "\<C-n>" :
             \ <SID>check_back_space() ? "\<TAB>" :
             \ deoplete#manual_complete()
-"call deoplete#custom#set('_', 'matchers', ['matcher_full_fuzzy'])
-
-"" js autocomplete
-let g:tern_request_timeout = 1
-let g:tern_request_timeout = 6000
-let g:tern#command = ["tern"]
-let g:tern#arguments = ["--persistent"]
-let g:deoplete#sources#tss#javascript_support = 1
-let g:tsuquyomi_javascript_support = 1
-let g:tsuquyomi_auto_open = 1
-let g:tsuquyomi_disable_quickfix = 1
-let g:node_host_prog = '~/.nvm/versions/node/v10.16.0/bin/neovim-node-host'
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
 
 " ctags
+let g:gutentags_enabled = 1
+let g:gutentags_resolve_symlinks = 1
 let g:tagbar_autofocus = 1
 let g:tagbar_autoclose = 1
-let g:tagbar_phpctags_bin=nvimBin.'/phpctags'
-let g:tagbar_phpctags_memory_limit = '512M'
 let g:tagbar_type_css = {
             \ 'ctagstype' : 'Css',
             \ 'kinds'     : [
@@ -168,19 +153,23 @@ let g:ansible_name_highlight = 'b'
 " vim-go https://github.com/fatih/vim-go-tutorial
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
-  let l:file = expand('%')
-  if l:file =~# '^\f\+_test\.go$'
-    call go#test#Test(0, 1)
-  elseif l:file =~# '^\f\+\.go$'
-    call go#cmd#Build(0)
-  endif
+    let l:file = expand('%')
+    if l:file =~# '^\f\+_test\.go$'
+        call go#test#Test(0, 1)
+    elseif l:file =~# '^\f\+\.go$'
+        call go#cmd#Build(0)
+    endif
 endfunction
 
 let g:go_list_type = "quickfix"
+let g:go_echo_go_info = 0
+let g:go_doc_popup_window = 1
+let g:go_gopls_enabled = 1
 let g:go_metalinter_autosave = 1
 let g:go_auto_type_info = 1
 let g:go_auto_sameids = 1
 let g:go_fmt_command = "goimports"
+let g:go_metalinter_autosave = 1
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
