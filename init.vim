@@ -7,22 +7,24 @@ Plug '2072/PHP-Indenting-for-VIm' " PHP indents
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'deoplete-plugins/deoplete-tag'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'StanAngeloff/php.vim'
 Plug 'airblade/vim-gitgutter' " Shows git changes in file (A Vim plugin which shows a git diff in the gutter (sign column) and stages/undoes hunks.)
 Plug 'avakhov/vim-yaml'
 Plug 'cespare/vim-toml'
 Plug 'cohlin/vim-colorschemes' " Dracula colortheme + airline theme, https://github.com/cohlin/vim-colorschemes
+Plug 'deoplete-plugins/deoplete-tag'
 Plug 'ekalinin/Dockerfile.vim'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'hashivim/vim-terraform'
 Plug 'jonathanfilip/vim-lucius' " Light colortheme
+Plug 'kristijanhusak/deoplete-phpactor'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
 Plug 'mzlogin/vim-markdown-toc'
+Plug 'noahfrederick/vim-composer'
 Plug 'pearofducks/ansible-vim'
+Plug 'phpactor/phpactor', {'for': 'php', 'tag': '*', 'do': 'composer install --no-dev -o'}
 Plug 'rakshazi/logstash.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdcommenter' " Cool plugin for commenting
@@ -148,7 +150,6 @@ let g:ansible_unindent_after_newline = 1
 let g:ansible_extra_syntaxes = "sh.vim"
 let g:ansible_attribute_highlight = "ao"
 let g:ansible_name_highlight = 'b'
-
 
 " vim-go https://github.com/fatih/vim-go-tutorial
 " run :GoBuild or :GoTestCompile based on the go file
