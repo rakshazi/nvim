@@ -102,14 +102,14 @@ vim.api.nvim_set_keymap('n', '<C-p>', ':BufferLineCyclePrev<CR>', { noremap = tr
 
 -- Set statusbar
 require('lualine').setup{
-		options = { theme = 'codedark' },
-		extensions = { 'nvim-tree' },
+	options = { theme = 'codedark' },
+	extensions = { 'nvim-tree' },
 }
 
 -- Set quickfix enhancer
-require('bqf').setup({
-    auto_enable = true,
-})
+require('bqf').setup{
+	auto_enable = true,
+}
 
 -- Remap space as leader key
 vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
