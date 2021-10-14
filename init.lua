@@ -1,10 +1,8 @@
 -- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
-
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 	vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
 end
-
 vim.api.nvim_exec([[
 augroup Packer
 autocmd!
@@ -15,33 +13,38 @@ augroup end
 -- Plugins
 local use = require('packer').use
 require('packer').startup(function()
+	-- base
 	use 'wbthomason/packer.nvim' -- Package manager
-	use 'sheerun/vim-polyglot' -- identation
-	use 'b3nj5m1n/kommentary' -- comments
+	use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
+	use 'nvim-treesitter/nvim-treesitter' -- incremental parser
+	use 'nvim-treesitter/nvim-treesitter-textobjects' -- add textobjects to the parser
+
+	-- languages
 	use 'fatih/vim-go' -- Golang
 	use 'pearofducks/ansible-vim' -- Ansible
-	-- UI to select things (files, grep results, open buffers...)
-	use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-	use 'rakshazi/darcula' -- colorscheme
-	use 'itchyny/lightline.vim' -- Fancier statusline
-	use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' } -- nerdtree-like
-	use { 'akinsho/bufferline.nvim', requires = 'kyazdani42/nvim-web-devicons' } -- buffer line
-	-- Add indentation guides even on blank lines
-	use 'lukas-reineke/indent-blankline.nvim'
-	-- Add git related info in the signs columns and popups
-	use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-	-- Highlight, edit, and navigate code using a fast incremental parsing library
-	use 'nvim-treesitter/nvim-treesitter'
-	-- Additional textobjects for treesitter
-	use 'nvim-treesitter/nvim-treesitter-textobjects'
-	use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
+
+	-- features
+	use 'sheerun/vim-polyglot' -- identation
+	use 'b3nj5m1n/kommentary' -- comments
 	use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
 	use 'hrsh7th/cmp-nvim-lsp' -- cmp source: nvim lsp
 	use 'hrsh7th/cmp-path' -- cmp source: system paths
 	use 'ray-x/cmp-treesitter' -- cmp source: treesitter
 	use 'saadparwaiz1/cmp_luasnip' -- cmp source: luasnip
+	use 'onsails/lspkind-nvim' -- type icons for cmp suggestions
 	use 'L3MON4D3/LuaSnip' -- Snippets plugin
+
+	-- UI
+	use 'rakshazi/darcula' -- colorscheme
+	use { 'akinsho/bufferline.nvim', requires = 'kyazdani42/nvim-web-devicons' } -- bufferline
+	use { 'hoob3rt/lualine.nvim', requires = 'kyazdani42/nvim-web-devicons' } -- statusline
+	use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' } -- nerdtree-like
+	use 'folke/lsp-colors.nvim' -- colorscheme fix for not (yet) supported LSP colors
+	use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } } -- git diff for lines
+	use 'lukas-reineke/indent-blankline.nvim' -- indentation guides even on blank lines
+	use 'kevinhwang91/nvim-bqf' -- quickfix windows enhancer
+	use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } } -- UI to select things
+	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' } -- native fzf implementation
 end)
 
 -- Incremental live completion (note: this is now a default on master)
@@ -81,7 +84,7 @@ vim.o.foldnestmax = 1
 vim.o.termguicolors = true
 vim.cmd [[colorscheme darcula]]
 
--- Set bufferbar
+-- Set bufferline
 require("bufferline").setup{
 	options = {
 		diagnostics = "nvim_lsp",
@@ -92,16 +95,21 @@ require("bufferline").setup{
 	}
 }
 
--- Set bufferbar hotkeys
+-- Set buffer hotkeys
 vim.api.nvim_set_keymap('n', '<C-w>', ':w|bd<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-n>', ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-p>', ':BufferLineCyclePrev<CR>', { noremap = true, silent = true })
 
 -- Set statusbar
-vim.g.lightline = {
-	active = { left = { { 'mode', 'paste' }, { 'gitbranch', 'readonly', 'filename', 'modified' } } },
-	component_function = { gitbranch = 'fugitive#head' },
+require('lualine').setup{
+		options = { theme = 'codedark' },
+		extensions = { 'nvim-tree' },
 }
+
+-- Set quickfix enhancer
+require('bqf').setup({
+    auto_enable = true,
+})
 
 -- Remap space as leader key
 vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
@@ -325,6 +333,9 @@ cmp.setup {
 			require('luasnip').lsp_expand(args.body)
 		end,
 	},
+	formatting = {
+		format = require('lspkind').cmp_format(),
+	},
 	mapping = {
 		['<C-p>'] = cmp.mapping.select_prev_item(),
 		['<C-n>'] = cmp.mapping.select_next_item(),
@@ -337,19 +348,8 @@ cmp.setup {
 			select = true,
 		},
 		['<Tab>'] = function(fallback)
-			if vim.fn.pumvisible() == 1 then
-				vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
-			elseif luasnip.expand_or_jumpable() then
-				vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
-			else
-				fallback()
-			end
-		end,
-		['<S-Tab>'] = function(fallback)
-			if vim.fn.pumvisible() == 1 then
-				vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, true, true), 'n')
-			elseif luasnip.jumpable(-1) then
-				vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-jump-prev', true, true, true), '')
+			if cmp.visible() then
+				cmp.select_next_item()
 			else
 				fallback()
 			end
@@ -357,8 +357,8 @@ cmp.setup {
 	},
 	sources = {
 		{ name = 'nvim_lsp' },
+		{ name = 'treesitter' },
 		{ name = 'luasnip' },
 		{ name = 'path' },
-		{ name = 'treesitter' },
 	},
 }
