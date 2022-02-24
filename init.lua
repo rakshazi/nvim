@@ -59,9 +59,6 @@ vim.wo.number = true
 -- Do not save when switching buffers (note: this is now a default on master)
 vim.o.hidden = true
 
--- Enable mouse mode
--- vim.o.mouse = 'a'
-
 -- Enable break indent
 vim.o.breakindent = true
 
@@ -136,9 +133,6 @@ vim.api.nvim_exec([[
 autocmd BufWritePre * :%s/\s\+$//e
 ]], false)
 
--- Y yank until the end of line  (note: this is now a default on master)
-vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
-
 -- Map blankline
 vim.g.indent_blankline_char = '┊'
 vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
@@ -150,13 +144,34 @@ vim.g.indent_blankline_show_trailing_blankline_indent = false
 vim.api.nvim_set_keymap('', '<C-e>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 vim.g.nvim_tree_quit_on_open = 1
 vim.g.nvim_tree_git_hl = 1
-vim.g.nvim_tree_highlight_opened_files = 1
+vim.g.nvim_tree_special_files = {}
 
 require('nvim-tree').setup {
 	auto_close = true,
 	auto_resize = true,
 	hijack_cursor = true,
-	open_on_setup = true
+	open_on_setup = true,
+	diagnostics = {
+		enable = true,
+		icons = {
+			hint = "",
+			info = "",
+			warning = "",
+			error = "",
+		}
+	},
+	git = {
+		enable = true,
+		ignore = false,
+		timeout = 500
+	},
+	view = {
+		mappings = {
+			list = {
+				{ key = '<C-e>', action = "close" },
+			},
+		},
+	},
 }
 
 -- nerdcommenter
@@ -187,15 +202,7 @@ vim.g.go_metalinter_autosave = 1
 vim.g.go_term_enabled = 1
 
 -- Gitsigns
-require('gitsigns').setup {
-	signs = {
-		add = { hl = 'GitGutterAdd', text = '+' },
-		change = { hl = 'GitGutterChange', text = '~' },
-		delete = { hl = 'GitGutterDelete', text = '_' },
-		topdelete = { hl = 'GitGutterDelete', text = '‾' },
-		changedelete = { hl = 'GitGutterChange', text = '~' },
-	},
-}
+require('gitsigns').setup {}
 
 -- Telescope
 require('telescope').setup {
