@@ -142,7 +142,6 @@ vim.g.indent_blankline_show_trailing_blankline_indent = false
 
 -- nerdtree-like
 vim.api.nvim_set_keymap('', '<C-e>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
-vim.g.nvim_tree_quit_on_open = 1
 vim.g.nvim_tree_git_hl = 1
 vim.g.nvim_tree_special_files = {}
 
@@ -151,6 +150,11 @@ require('nvim-tree').setup {
 	auto_resize = true,
 	hijack_cursor = true,
 	open_on_setup = true,
+	actions = {
+		open_file = {
+			nvim_tree_quit_on_open = 1,
+		},
+	},
 	diagnostics = {
 		enable = true,
 		icons = {
@@ -202,7 +206,15 @@ vim.g.go_metalinter_autosave = 1
 vim.g.go_term_enabled = 1
 
 -- Gitsigns
-require('gitsigns').setup {}
+require('gitsigns').setup {
+	signs = {
+		add = { hl = 'GitGutterAdd', text = '+' },
+		change = { hl = 'GitGutterChange', text = '~' },
+		delete = { hl = 'GitGutterDelete', text = '_' },
+		topdelete = { hl = 'GitGutterDelete', text = '‾' },
+		changedelete = { hl = 'GitGutterChange', text = '~' },
+	},
+}
 
 -- Telescope
 require('telescope').setup {
