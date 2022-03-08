@@ -24,6 +24,7 @@ require('packer').startup(function()
 	use 'pearofducks/ansible-vim' -- Ansible
 
 	-- features
+	use 'axelf4/vim-strip-trailing-whitespace' -- remove trailing whitespaces on changed lines only
 	use 'sheerun/vim-polyglot' -- identation
 	use 'b3nj5m1n/kommentary' -- comments
 	use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
@@ -128,11 +129,6 @@ autocmd TextYankPost * silent! lua vim.highlight.on_yank()
 augroup end
 ]], false)
 
--- Remove trailing whitespaces
-vim.api.nvim_exec([[
-autocmd BufWritePre * :%s/\s\+$//e
-]], false)
-
 -- Map blankline
 vim.g.indent_blankline_char = '┊'
 vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
@@ -152,7 +148,7 @@ require('nvim-tree').setup {
 	open_on_setup = true,
 	actions = {
 		open_file = {
-			nvim_tree_quit_on_open = 1,
+			quit_on_open = 1,
 		},
 	},
 	diagnostics = {
