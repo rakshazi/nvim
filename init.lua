@@ -142,7 +142,6 @@ vim.g.nvim_tree_git_hl = 1
 vim.g.nvim_tree_special_files = {}
 
 require('nvim-tree').setup {
-	auto_close = true,
 	auto_resize = true,
 	hijack_cursor = true,
 	open_on_setup = true,
