@@ -34,6 +34,7 @@ require('packer').startup(function()
 	use 'saadparwaiz1/cmp_luasnip' -- cmp source: luasnip
 	use 'onsails/lspkind-nvim' -- type icons for cmp suggestions
 	use 'L3MON4D3/LuaSnip' -- Snippets plugin
+	use 'mzlogin/vim-markdown-toc' -- markdown ToC generator
 
 	-- UI
 	use 'rakshazi/darcula' -- colorscheme
@@ -138,16 +139,16 @@ vim.g.indent_blankline_show_trailing_blankline_indent = false
 
 -- nerdtree-like
 vim.api.nvim_set_keymap('', '<C-e>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
-vim.g.nvim_tree_git_hl = 1
-vim.g.nvim_tree_special_files = {}
-
 require('nvim-tree').setup {
-	auto_resize = true,
 	hijack_cursor = true,
 	open_on_setup = true,
+	renderer = {
+		highlight_git = true,
+		special_files = {}
+	},
 	actions = {
 		open_file = {
-			quit_on_open = 1,
+			quit_on_open = true,
 		},
 	},
 	diagnostics = {
