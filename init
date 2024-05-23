@@ -1,0 +1,4 @@
+#!/bin/bash
+# install neovim config
+
+nvim --headless +PackerInstall +qall
